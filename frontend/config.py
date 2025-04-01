@@ -1,4 +1,5 @@
-LOG_FILE = "/app/shared_logs/logs/log_text.md"
+# LOG_FILE = "/app/shared_logs/logs/log_text.md"
+LOG_FILE = "logs/log_text.md"
 HOST_NAME = "0.0.0.0"
 GRADIO_PORT = 7860
 FAST_API_PORT = 8001

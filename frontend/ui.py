@@ -22,6 +22,8 @@ load_dotenv()
 
 EXA_API_KEY=os.getenv("EXA_API_KEY")
 JINA_API_KEY=os.getenv("JINA_API_KEY")
+# fast_api_server="fastapiserver"
+fast_api_server="127.0.0.1"
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -79,7 +81,7 @@ class ChatBot:
         #send file path to FastAPI
         with open(file_input, "rb") as file:
             self.collection_name_global = requests.post(
-                url=f"http://{HOST_NAME}:{FAST_API_PORT}/upload?drive_link={drive_link}", 
+                url=f"http://{fast_api_server}:{FAST_API_PORT}/upload?drive_link={drive_link}", 
                 files={"file": file}
             ).text.strip('''"''')
         logger.info(f"This ids from upload fast_api: {self.collection_name_global}")
@@ -141,7 +143,7 @@ class ChatBot:
         new_history= list(history) if history else [] 
 
         response = requests.get(
-            f"http://{HOST_NAME}:{FAST_API_PORT}/process", 
+            f"http://{fast_api_server}:{FAST_API_PORT}/process", 
             params={
                 "prompt": message,
                 "collection_name_global": self.collection_name_global
