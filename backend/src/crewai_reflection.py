@@ -46,7 +46,10 @@ def reflection(
 
         process=Process.sequential,
         verbose=True,
-        knowledge={"correct_context": [string_source], "metadata": {"preference": "personal"}},
+        knowledge={
+            "sources": [string_source],
+            "collection_name": "crew_knowledge",
+        },
         memory=False,
         output_log_file=LOG_PATH
     )
@@ -68,7 +71,7 @@ def reflection(
 
     inputs = sanitize_inputs(inputs)  # escape curly braces in the inputs
 
-    results_inital = initial_crew.kickoff(inputs=inputs)
+    results_inital = initial_crew.kickoff(inputs=inputs).raw
 
     logger.info(f"initial crew response in reflection-- {results_inital}")
 
@@ -139,7 +142,10 @@ def reflection(
         
         process=Process.sequential,
         verbose=True,
-        knowledge={"correct_context": [string_source], "metadata": {"preference": "personal"}},
+        knowledge={
+            "sources": [string_source],
+            "collection_name": "crew_knowledge",
+        },
         memory=False,
         output_log_file=LOG_PATH
     )
@@ -162,7 +168,7 @@ def reflection(
             return sanitized_inputs
 
     inputs = sanitize_inputs(inputs) # escape curly braces in the inputs
-    ans=reflection_crew.kickoff(inputs=inputs)
+    ans=reflection_crew.kickoff(inputs=inputs).raw
 
     inputs['responses'] = ans
 
@@ -176,7 +182,7 @@ def reflection(
     for _ in range(n-1):
         if _ == n-2:
             final_agent_task.expected_output = MARKDOWN_TASK
-        ans = reflection_crew.kickoff(inputs=inputs)
+        ans = reflection_crew.kickoff(inputs=inputs).raw
         inputs['responses'] = ans
         logger.info(f"reflection at n={_+2}--{inputs['responses']}")
 
