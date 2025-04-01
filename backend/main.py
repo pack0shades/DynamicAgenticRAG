@@ -1,6 +1,7 @@
 import os
 import openai
 from typing import List
+from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 from concurrent.futures import ThreadPoolExecutor
 from src.reranker import jina_reranker
 from src.router import get_routed_agent
@@ -188,6 +189,8 @@ def pipeline(
     agent_list = static_agent_list + dynamic_agent_list
     tasks_list = static_tasks_list + dynamic_tasks_list
 
+    logger.debug(f"Agent list: {agent_list}")
+
     meta_agent= Agent(
             role= META_AGENT_PROMPT["role"],
             goal= META_AGENT_PROMPT["goal"],
@@ -205,6 +208,8 @@ def pipeline(
             context= tasks_list,
             async_execution=False
         )
+    
+    logger.debug(f"Meta agent task description: {meta_agent_task_description}")
 
     if use_reflection:
         response = reflection(
@@ -214,16 +219,23 @@ def pipeline(
             agents_task=tasks_list,
             meta_agent=meta_agent,
             meta_agent_task=meta_agent_task,
-            n=n_reflection).raw
+            n=n_reflection)
         
     else:
+        string_source = StringKnowledgeSource(
+            content=context,
+            metadata={"preference": "personal"}
+        )
         meta_agent_task.expected_output = MARKDOWN_TASK
         initial_crew = Crew(
             agents= [*agent_list, meta_agent],
             tasks= [*tasks_list, meta_agent_task],
             process=Process.sequential,
             verbose=True,
-            knowledge={"correct_context": [context], "metadata": {"preference": "personal"}},
+            knowledge={
+                "sources": [string_source],
+                "collection_name": "crew_knowledge",
+            },
             memory=False,
             output_log_file=LOG_PATH
         )
@@ -267,7 +279,7 @@ def main():
         reranker=True,
         method="cr",
         agent_type="dynamic",
-        use_reflection=True,
+        use_reflection=False,
         n_reflection=4,
         use_router=True
     )
