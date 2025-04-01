@@ -45,6 +45,20 @@ RUN uv pip install pdf2image
 RUN uv pip install python-dateutil
 RUN uv pip install unstructured.pytesseract
 RUN uv pip install --upgrade nltk
+RUN python setup.py
+
+RUN apt-get update
+
+RUN apt-get update && apt-get install -y \
+    libleptonica-dev \
+    tesseract-ocr \
+    libtesseract-dev \
+    python3-pil \
+    tesseract-ocr-eng \
+    tesseract-ocr-script-latn \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN export TESSDATA_PREFIX=/usr/share/tesseract-orc
 
 RUN guardrails configure --enable-metrics --enable-remote-inferencing --token $GUARDRAILS_API_KEY
 
