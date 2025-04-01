@@ -1,44 +1,49 @@
-services:
+version: '3.8'
 
+services:
   gradio:
     image: gradio_client
     container_name: gradio
+    ports:
+      - "7860:7860"
     volumes:
-      - shared_logs:/app/shared_logs/logs  # Mount volume to the log directory
+      - shared_logs:/app/shared_logs/logs
     build: 
-      context: ./frontend  # Set build context to current directory
+      context: ./frontend
     environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
       - GRADIO_SERVER_PORT=7860
       - EXA_API_KEY=${EXA_API_KEY}
       - JINA_API_KEY=${JINA_API_KEY}
       - GUARDRAILS_API_KEY=${GUARDRAILS_API_KEY}
-    network_mode: host
+    networks:
+      - app-network
     depends_on:
       - fastapiserver
-
 
   fastapiserver:
     image: backend
     container_name: fastapiserver
+    ports:
+      - "8001:8001"  # Added port mapping
     volumes:
-      - shared_logs:/app/shared_logs/logs  # Mount volume to the log directory
+      - shared_logs:/app/shared_logs/logs
     environment:
       - JINA_API_KEY=${JINA_API_KEY}
       - GUARDRAILS_API_KEY=${GUARDRAILS_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-    network_mode: host
     build:
-      context: ./backend  # Set build context to current directory
+      context: ./backend
       args:
         GUARDRAILS_API_KEY: ${GUARDRAILS_API_KEY}
         OPENAI_API_KEY: ${OPENAI_API_KEY}
         JINA_API_KEY: ${JINA_API_KEY}
-          # Correctly pass build argument
-    # other configurations like environment variables, etc.
-
+    networks:
+      - app-network  # Added to shared network
 
 volumes:
-  shared_logs:  # Declare the shared volume
+  shared_logs:
 
 networks:
   app-network:
+    driver: bridge
