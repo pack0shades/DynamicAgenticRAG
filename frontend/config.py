@@ -1,4 +1,4 @@
-LOG_FILE = "/app/shared_logs/logs/log_text.md"
+LOG_FILE = "/app/shared_logs/logs/log_text.txt"
 # LOG_FILE = "logs/log_text.md"
 FAST_API_HOST="fastapiserver"
 # FAST_API_HOST="127.0.0.1"
