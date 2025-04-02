@@ -118,14 +118,6 @@ A JSON file will be saved to your computer. Move it to the folder where your Pat
 
 ## Installation
 
-### A. Run with Docker
-
-### Prerequisites
-  - Linux based OS
-
-  - Ensure you have Docker and docker compose both latest version installed on your system before proceeding. Docker compose  will be used to build and run the application in a containerized environment. For installation please refer the offcial documneation of docker [Docket Installation Guide](https://docs.docker.com/compose/install/linux/)
-
-
 ### API Keys Setup
 
 To enable seamless functionality and ensure reliable web query operations, you’ll need to generate API keys for the following services:
@@ -152,71 +144,147 @@ To enable seamless functionality and ensure reliable web query operations, you�
 
 Ensure all keys are securely stored and added to the appropriate environment variables or configuration files for smooth integration with the project.
 
+
+### A. Run with Docker
+
+### Prerequisites
+
+  - Ensure you have Docker and docker compose both latest version installed on your system before proceeding. Docker compose  will be used to build and run the application in a containerized environment. For installation please refer the offcial documneation of docker [Docket Installation Guide](https://docs.docker.com/compose/install/linux/)
+
 ---
 
-### 1. Environment Setup
-
-Export the following API keys to a source file (e.g., `bashrc`):
+## 1. Clone the Repository
 
 ```bash
-OPENAI_API_KEY={OPENAI_API_KEY}
-JINA_API_KEY={JINA_API_KEY}
-EXA_API_KEY={EXA_API_KEY}
-GUARDRAILS_API_KEY={GUARDRAILS_API_KEY}
+git clone https://github.com/pack0shades/DynamicAgenticRAG.git
+cd DynamicAgenticRAG
 ```
-### 2. Build with docker
-  ```bash
-  # run the following command in terminal
-  docker compose up --build
-  
-  # if the docker is already built you can run
-  docker compose up
-  ```
-  
-  you can access UI through http://0.0.0.0:7860
+
+## 2. Environment Setup
+
+It is recommended to store all required API keys in a `.env` file for better management. Create a `.env` file in the project root directory and add the following:
+
+```ini
+OPENAI_API_KEY={your_openai_api_key}
+JINA_API_KEY={your_jina_api_key}
+EXA_API_KEY={your_exa_api_key}
+GUARDRAILS_API_KEY={your_guardrails_api_key}
+```
+
+Alternatively, you can export these API keys in your shell configuration file (e.g., `.bashrc` or `.zshrc`):
+
+```bash
+echo "export OPENAI_API_KEY={your_openai_api_key}" >> ~/.bashrc
+echo "export JINA_API_KEY={your_jina_api_key}" >> ~/.bashrc
+echo "export EXA_API_KEY={your_exa_api_key}" >> ~/.bashrc
+echo "export GUARDRAILS_API_KEY={your_guardrails_api_key}" >> ~/.bashrc
+source ~/.bashrc
+```
+
+## 3. Load Docker Images from Docker Hub
+
+Pull the required images using the following commands:
+
+```bash
+docker pull lakshmendpara/pathway_gradio_iitj
+docker pull lakshmendpara/pathway_backend_iitj:latest
+```
+
+## 4. Build and Run with Docker
+
+To build and start the services, run:
+
+```bash
+docker-compose build
+```
+
+If the containers are already built, start them with:
+
+```bash
+docker-compose up
+```
+
+Once running, you can access the UI at:
+
+📌 **http://0.0.0.0:7860**
 
 
 ### B. Installation without Docker
 
-### Normal installation in Linux based systems
-  ```bash
-  # run these command on your terminal
-  apt-get update && apt-get install liblaeptonica-dev\
-  tesseract-ocr libtesseract-dev\
-  python3-pil tesseract-ocr-eng tesseract-ocr-script-latn -y
-  
-  apt install libmagic1 libmagic-dev -y
-  apt-get update && apt-get install ffmpeg libsm6 libxext6 -y
-  apt-get update && apt-get install libgl1 -y
-  apt-get install poppler-utils -y
-  pip install uv
+## 1. Clone the Repository
 
-  # make a vitual environment
-  uv venv <path of venv> --python 3.10
+```bash
+git clone https://github.com/pack0shades/DynamicAgenticRAG.git
+cd DynamicAgenticRAG
+git checkout stagging
+```
 
-  # activate the environment
-  source <path of venv>/bin/acitvate
+**NOTE : ** You need to be in stagging branch
 
-  uv pip sync ./backend/requirements.txt
-  uv pip install "pymilvus[model]"
-  uv pip install "pathway[xpack-llm-docs]"
-  uv pip install python-magic
-  uv pip install Pillow
-  uv pip install pi-heif
-  uv pip install unstructured-inference
-  uv pip install pdf2image
-  uv pip install python-dateutil
-  uv pip install unstructured.pytesseract
-  uv pip install --upgrade nltk
-  uv pip install gradio loguru openai exa_py python-dotenv
+## 2. Environment Setup
 
-  guardrails configure --enable-metrics --enable-remote-inferencing --token $GUARDRAILS_API_KEY
+It is recommended to store all required API keys in a `.env` file for better management. Create a `.env` file in the project root directory and add the following:
 
-  guardrails hub install hub://guardrails/regex_match
+```ini
+OPENAI_API_KEY={your_openai_api_key}
+JINA_API_KEY={your_jina_api_key}
+EXA_API_KEY={your_exa_api_key}
+GUARDRAILS_API_KEY={your_guardrails_api_key}
+```
 
-  guardrails hub install hub://guardrails/toxic_language
+Alternatively, you can export these API keys in your shell configuration file (e.g., `.bashrc` or `.zshrc`):
 
-  # now in one terminal run backend/fast_api_server.py
-  # in other terminal run frontend/ui.py
-  # now you can access the interface through url http://0.0.0.0:7860
-  ```
+```bash
+echo "export OPENAI_API_KEY={your_openai_api_key}" >> ~/.bashrc
+echo "export JINA_API_KEY={your_jina_api_key}" >> ~/.bashrc
+echo "export EXA_API_KEY={your_exa_api_key}" >> ~/.bashrc
+echo "export GUARDRAILS_API_KEY={your_guardrails_api_key}" >> ~/.bashrc
+source ~/.bashrc
+```
+
+## 3. Installation without Docker
+
+### Normal installation in Linux-based systems
+
+```bash
+# run these commands on your terminal
+apt-get update && apt-get install liblaeptonica-dev\
+tesseract-ocr libtesseract-dev\
+python3-pil tesseract-ocr-eng tesseract-ocr-script-latn -y
+
+apt install libmagic1 libmagic-dev -y
+apt-get update && apt-get install ffmpeg libsm6 libxext6 -y
+apt-get update && apt-get install libgl1 -y
+apt-get install poppler-utils -y
+pip install uv
+
+# make a virtual environment
+uv venv <path of venv> --python 3.10
+
+# activate the environment
+source <path of venv>/bin/activate
+
+uv pip sync ./backend/requirements.txt
+uv pip install "pymilvus[model]"
+uv pip install "pathway[xpack-llm-docs]"
+uv pip install python-magic
+uv pip install Pillow
+uv pip install pi-heif
+uv pip install unstructured-inference
+uv pip install pdf2image
+uv pip install python-dateutil
+uv pip install unstructured.pytesseract
+uv pip install --upgrade nltk
+uv pip install gradio loguru openai exa_py python-dotenv
+
+guardrails configure --enable-metrics --enable-remote-inferencing --token $GUARDRAILS_API_KEY
+
+guardrails hub install hub://guardrails/regex_match
+
+guardrails hub install hub://guardrails/toxic_language
+
+# now in one terminal run backend/fast_api_server.py
+# in another terminal run frontend/ui.py
+# now you can access the interface through URL http://0.0.0.0:7860
+```
+
