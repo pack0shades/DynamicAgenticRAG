@@ -186,19 +186,11 @@ source ~/.bashrc
 Pull the required images using the following commands:
 
 ```bash
-docker pull lakshmendpara/pathway_gradio_iitj
+docker pull lakshmendpara/pathway_gradio_iitj:latest
 docker pull lakshmendpara/pathway_backend_iitj:latest
 ```
 
-## 4. Build and Run with Docker
-
-To build and start the services, run:
-
-```bash
-docker-compose build
-```
-
-If the containers are already built, start them with:
+## 4. Run with Docker
 
 ```bash
 docker-compose up
