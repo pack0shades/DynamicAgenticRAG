@@ -1,4 +1,4 @@
-LOG_PATH="./logs/log_text.md"
+LOG_PATH="./logs/log_text.txt"
 ALLOW_DELEGATION = False
 HOST_NAME = "0.0.0.0"
 GRADIO_PORT = 7860
