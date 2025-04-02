@@ -2,7 +2,7 @@ name: pathway_iitj
 
 services:
   gradio:
-    image: gradio_client
+    image: lakshmendpara/pathway_gradio_iitj:latest
     container_name: gradio
     ports:
       - "7860:7860"
@@ -22,7 +22,7 @@ services:
       - fastapiserver
 
   fastapiserver:
-    image: backend
+    image: lakshmendpara/pathway_backend_iitj:latest
     container_name: fastapiserver
     ports:
       - "8001:8001"  # Added port mapping
